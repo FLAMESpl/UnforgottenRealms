@@ -64,6 +64,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UnforgottenRealms.Game\UnforgottenRealms.Game.csproj">
+      <Project>{726f31aa-1dfa-4313-9e6e-dd89bcd219e1}</Project>
+      <Name>UnforgottenRealms.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UnforgottenRealms.UI\UnforgottenRealms.UI.csproj">
+      <Project>{be17aaa2-2a3b-4c97-979e-e47dbd887800}</Project>
+      <Name>UnforgottenRealms.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="UnforgottenRealms.Core\UnforgottenRealms.Core.csproj">
       <Project>{0a37de8f-4714-4728-81d9-8d3251cfcafc}</Project>
       <Name>UnforgottenRealms.Core</Name>
