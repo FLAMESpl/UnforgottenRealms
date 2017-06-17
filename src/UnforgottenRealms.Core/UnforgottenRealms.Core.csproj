@@ -55,6 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\InputHandle.cs" />
+    <Compile Include="Input\InputProcessor.cs" />
+    <Compile Include="Input\Layer.cs" />
+    <Compile Include="Input\LayerCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
