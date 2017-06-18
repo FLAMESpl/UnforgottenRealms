@@ -33,17 +33,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="sfmlnet-audio-2">
-      <HintPath>..\..\packages\SFML.Net.2.1.5\lib\sfmlnet-audio-2.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="sfmlnet-audio-2, Version=2.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\sfmlnet\sfmlnet-audio-2.dll</HintPath>
     </Reference>
-    <Reference Include="sfmlnet-graphics-2">
-      <HintPath>..\..\packages\SFML.Net.2.1.5\lib\sfmlnet-graphics-2.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="sfmlnet-graphics-2, Version=2.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\sfmlnet\sfmlnet-graphics-2.dll</HintPath>
     </Reference>
-    <Reference Include="sfmlnet-window-2">
-      <HintPath>..\..\packages\SFML.Net.2.1.5\lib\sfmlnet-window-2.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="sfmlnet-system-2">
+      <HintPath>..\..\sfmlnet\sfmlnet-system-2.dll</HintPath>
+    </Reference>
+    <Reference Include="sfmlnet-window-2, Version=2.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\sfmlnet\sfmlnet-window-2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,6 +58,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\ComponentBase.cs" />
+    <Compile Include="Components\Rectangle\Button.cs" />
+    <Compile Include="Components\Rectangle\RectangleComponentBase.cs" />
+    <Compile Include="Containers\ComponentContainer.cs" />
+    <Compile Include="Containers\ComponentsCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

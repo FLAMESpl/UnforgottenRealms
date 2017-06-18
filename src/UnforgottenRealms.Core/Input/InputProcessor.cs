@@ -20,8 +20,7 @@ namespace UnforgottenRealms.Core.Input
         }
 
         private void ProcessMouseButtonPress(object sender, MouseButtonEventArgs e)
-        {
-        }
+        {        }
 
         private void ProcessMouseMovement(object sender, MouseMoveEventArgs e)
         {
