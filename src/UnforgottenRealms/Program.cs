@@ -1,8 +1,8 @@
-﻿using System;
-using SFML.Graphics;
-using SFML.Window;
+﻿using SFML.Window;
 using UnforgottenRealms.Core.Input;
 using UnforgottenRealms.Window;
+using UnforgottenRealms.Controllers;
+using System;
 
 namespace UnforgottenRealms
 {
@@ -10,6 +10,12 @@ namespace UnforgottenRealms
     {
         static void Main(string[] args)
         {
+            var controllers = new ControllersContainer
+            {
+                [typeof(MenuController)] = x => new MenuController(x),
+                [typeof(ExitController)] = null
+            };
+
             var settings = new ContextSettings
             {
                 AntialiasingLevel = 8
@@ -18,12 +24,25 @@ namespace UnforgottenRealms
             using (var window = new GameWindow(new VideoMode(640, 480), settings))
             {
                 var inputProcessor = new InputProcessor(window, 1);
-
-                while (window.IsOpen)
+                var controllerType = typeof(MenuController);
+                var controllerArgs = new ControllerCreationArguments
                 {
-                    window.DispatchEvents();
-                    window.Clear(new Color(100, 100, 200));
-                    window.Display();
+                    Window = window
+                };
+
+                Func<ControllerCreationArguments, ControllerBase> controllerFactory;
+                while ((controllerFactory = controllers[controllerType]) != null)
+                {
+                    ControllerBase controller = null;
+                    try
+                    {
+                        controller = controllerFactory.Invoke(controllerArgs);
+                        (controllerType, controllerArgs) = controller.Run();
+                    }
+                    finally
+                    {
+                        controller?.Dispose();
+                    }
                 }
             }
         }
