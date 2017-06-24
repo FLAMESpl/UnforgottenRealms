@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 
 namespace UnforgottenRealms.Core.Input
 {
@@ -14,12 +15,12 @@ namespace UnforgottenRealms.Core.Input
 
         public void Add() => new Layer();
 
-        public InputHandle MatchHandle(int x, int y)
+        public IHandle<T> MatchHandle<T>(T eventArgs) where T : EventArgs
         {
-            InputHandle handle = null;
+            IHandle<T> handle = null;
             for (int i = 0; i < Count; i++)
             {
-                handle = Items[i].MatchHandle(x, y);
+                handle = Items[i].MatchHandle(eventArgs);
                 if (handle != null)
                     break;
             }
