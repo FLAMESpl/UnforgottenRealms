@@ -6,7 +6,7 @@ using UnforgottenRealms.Window;
 
 namespace UnforgottenRealms.ComponentSchemes
 {
-    public class MainMenuSchema
+    public class MenuSchema
     {
         public Color HighlightedComponentColor { get; set; } = Color.Red;
         public Color IdleComponentColor { get; set; } = Color.Black;
@@ -19,20 +19,38 @@ namespace UnforgottenRealms.ComponentSchemes
 
         private GameWindow window;
 
-        public MainMenuSchema(GameWindow window)
+        public MenuSchema(GameWindow window)
         {
             this.window = window;
         }
 
         public Button CreateNavigationButton(int heightOrder, string text)
         {
-            var button = CreateBaseComponent<Button>();
+            var button = CreateBaseComponent<Button>(text);
             button.Shape.Size = NavigationButtonSize;
-            button.Text.DisplayedString = text;
             button.HighlightColor = HighlightedComponentColor;
             button.IdleColor = IdleComponentColor;
             button.Position = new Vector2f(0, heightOrder * NavigationButtonSize.Y + NavigationButtonHeight);
             return button;
+        }
+
+        public TextBox CreatePlayerNameTextBox(int heightOrder, string text)
+        {
+            var textBox = CreateBaseComponent<TextBox>(text);
+            textBox.Shape.Size = NavigationButtonSize;
+            textBox.IdleColor = IdleComponentColor;
+            textBox.Position = new Vector2f(0, heightOrder * NavigationButtonSize.Y + NavigationButtonHeight);
+            textBox.MaxLength = 16;
+            return textBox;
+        }
+
+        public Label CreateLabel(int heightOrder, string text)
+        {
+            var label = CreateBaseComponent<Label>(text);
+            label.Shape.Size = NavigationButtonSize;
+            label.Shape.FillColor = IdleComponentColor;
+            label.Position = new Vector2f(0, heightOrder * NavigationButtonSize.Y + NavigationButtonHeight);
+            return label;
         }
 
         public Frame CreateSectionFrame()
@@ -41,7 +59,7 @@ namespace UnforgottenRealms.ComponentSchemes
             var renderWindow = window.RenderWindow;
             var verticalMargin = renderWindow.Size.Y * 0.05f;
             
-            var frame = CreateBaseComponent<Frame>();
+            var frame = CreateBaseComponent<Frame>(string.Empty);
             frame.Position = new Vector2f(navigationBarLength, verticalMargin);
             frame.Size = new Vector2f(renderWindow.Size.X - navigationBarLength * 2, renderWindow.Size.Y - verticalMargin * 2);
             frame.Shape.FillColor = Color.Blue;
@@ -49,7 +67,7 @@ namespace UnforgottenRealms.ComponentSchemes
             return frame;
         }
 
-        private T CreateBaseComponent<T>() where T : RectangleComponentBase, new()
+        public T CreateBaseComponent<T>(string text) where T : RectangleComponentBase, new()
         {
             var component = new T();
             component.Shape = new RectangleShape
@@ -63,6 +81,7 @@ namespace UnforgottenRealms.ComponentSchemes
                 CharacterSize = FontSize
             };
             component.TextPosition = new Vector2f(4, 4);
+            component.Text.DisplayedString = text;
             return component;
         }
     }

@@ -62,6 +62,7 @@
     <Compile Include="Components\Rectangle\Button.cs" />
     <Compile Include="Components\Rectangle\DropBox.cs" />
     <Compile Include="Components\Rectangle\Frame.cs" />
+    <Compile Include="Components\Rectangle\Label.cs" />
     <Compile Include="Components\Rectangle\MenuItems\ButtonMenuItem.cs" />
     <Compile Include="Components\Rectangle\MenuItems\RectangeMenuItemBase.cs" />
     <Compile Include="Components\Rectangle\RectangleComponentBase.cs" />

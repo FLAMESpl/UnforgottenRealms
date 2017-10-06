@@ -5,6 +5,9 @@ using UnforgottenRealms.Controllers;
 using System;
 using System.Linq;
 using UnforgottenRealms.Core.Utils;
+using UnforgottenRealms.MainMenu;
+using UnforgottenRealms.GameStart;
+using System.Diagnostics;
 
 namespace UnforgottenRealms
 {
@@ -15,6 +18,7 @@ namespace UnforgottenRealms
             var controllers = new ControllersContainer
             {
                 [typeof(MenuController)] = x => new MenuController(x),
+                [typeof(GameController)] = x => new GameController(x),
                 [typeof(ExitController)] = null
             };
 
@@ -38,16 +42,25 @@ namespace UnforgottenRealms
                 Func<ControllerCreationArguments, ControllerBase> controllerFactory;
                 while ((controllerFactory = controllers[controllerType]) != null)
                 {
+                    var error = false;
                     ControllerBase controller = null;
                     try
                     {
                         controller = controllerFactory.Invoke(controllerArgs);
                         (controllerType, controllerArgs) = controller.Run();
                     }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.ToString());
+                        error = true;
+                    }
                     finally
                     {
                         controller?.Dispose();
                     }
+
+                    if (error)
+                        break;
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using SFML.Window;
+﻿using SFML.Graphics;
+using SFML.Window;
 using System;
 using UnforgottenRealms.ComponentSchemes;
 using UnforgottenRealms.Core.Input;
@@ -7,22 +8,31 @@ using UnforgottenRealms.UI.Components.Rectangle;
 using UnforgottenRealms.UI.Containers;
 using UnforgottenRealms.Window;
 
-namespace UnforgottenRealms.Controllers
+namespace UnforgottenRealms.MainMenu
 {
-    public partial class MenuController : IWindowContext
+    public class MenuComponents : Drawable, IWindowContext
     {
+        public event EventHandler ExitRequested;
+        public event EventHandler StartRequested;
+
+        private GameWindow window;
         private InputProcessor inputProcessor;
         private ComponentContainer activeContainer;
         private ComponentContainer homeComponents;
         private ComponentContainer optionsComponents;
         private ComponentContainer playComponents;
 
+        public MenuComponents(GameWindow window)
+        {
+            this.window = window;
+        }
+
         public void Initialize()
         {
             var HOME_LAYER = 0;
             var PLAY_LAYER = 1;
             var OPTIONS_LAYER = 2;
-            var schema = new MainMenuSchema(window);
+            var schema = new MenuSchema(window);
 
             homeComponents = new ComponentContainer();
             optionsComponents = new ComponentContainer();
@@ -41,7 +51,7 @@ namespace UnforgottenRealms.Controllers
 
             var exitButton = schema.CreateNavigationButton(2, "Exit");
             RegisterButton(exitButton, HOME_LAYER);
-            exitButton.MouseClicked += (s, e) => Exit();
+            exitButton.MouseClicked += (s, e) => OnExitRequest();
             homeComponents.Add(exitButton);
 
             var backFromOptionsButton = schema.CreateNavigationButton(2, "Back");
@@ -52,15 +62,28 @@ namespace UnforgottenRealms.Controllers
             var optionsFrame = schema.CreateSectionFrame();
             optionsComponents.Add(optionsFrame);
 
-            var buttona = schema.CreateNavigationButton(0, "AA");
-            RegisterButton(buttona, OPTIONS_LAYER);
-            buttona.MouseClicked += EventHandlerToChangeLayer(HOME_LAYER, homeComponents);
-            optionsFrame.Components.Add(buttona);
+            var startButton = schema.CreateNavigationButton(0, "Start");
+            RegisterButton(startButton, PLAY_LAYER);
+            startButton.MouseClicked += (s, e) => OnStartRequest();
+            playComponents.Add(startButton);
 
             var backFromPlayButton = schema.CreateNavigationButton(2, "Back");
             RegisterButton(backFromPlayButton, PLAY_LAYER);
             backFromPlayButton.MouseClicked += EventHandlerToChangeLayer(HOME_LAYER, homeComponents);
             playComponents.Add(backFromPlayButton);
+
+            var playFrame = schema.CreateSectionFrame();
+            playComponents.Add(playFrame);
+
+            var playersCountLabel = schema.CreateLabel(0, "Players count:");
+            playFrame.Components.Add(playersCountLabel);
+
+            for (int i = 1; i <= 4; i++)
+            {
+                var playerNameTextBox = schema.CreatePlayerNameTextBox(i, $"PLAYER {i}");
+                RegisterTextBox(playerNameTextBox, PLAY_LAYER);
+                playFrame.Components.Add(playerNameTextBox);
+            }
 
             activeContainer = homeComponents;
             inputProcessor.Layers[HOME_LAYER].Enabled = true;
@@ -73,6 +96,13 @@ namespace UnforgottenRealms.Controllers
                 layer.AddHandle<MouseButtonEventArgs>(button);
                 layer.AddHandle<MouseMoveEventArgs>(button);
                 layer.AddHandle<MouseEnteredRegionEventArgs>(button);
+            }
+
+            void RegisterTextBox(TextBox textBox, int layerIndex)
+            {
+                var layer = inputProcessor.Layers[layerIndex];
+                layer.AddHandle<MouseButtonEventArgs>(textBox);
+                layer.AddHandle<TextEventArgs>(textBox);
             }
 
             EventHandler<MouseButtonEventArgs> EventHandlerToChangeLayer(int layer, ComponentContainer container)
@@ -91,5 +121,11 @@ namespace UnforgottenRealms.Controllers
         {
 
         }
+
+        public void Draw(RenderTarget target, RenderStates states) => target.Draw(activeContainer, states);
+
+        private void OnExitRequest() => ExitRequested?.Invoke(this, EventArgs.Empty);
+
+        private void OnStartRequest() => StartRequested?.Invoke(this, EventArgs.Empty);
     }
 }
