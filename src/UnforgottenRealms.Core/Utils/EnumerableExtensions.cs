@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UnforgottenRealms.Core.Utils
 {
@@ -11,6 +12,12 @@ namespace UnforgottenRealms.Core.Utils
 
             foreach (var item in second)
                 yield return item;
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            foreach (var item in collection)
+                action.Invoke(item);
         }
     }
 }

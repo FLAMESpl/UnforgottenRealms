@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace UnforgottenRealms.Core.Input
@@ -14,6 +15,13 @@ namespace UnforgottenRealms.Core.Input
         }
 
         public void Add() => new Layer();
+
+        public void ActivateSingle(int layerIndex)
+        {
+            foreach (var l in Items)
+                l.Enabled = false;
+            this[layerIndex].Enabled = true;
+        }
 
         public IHandle<T> MatchHandle<T>(T eventArgs) where T : EventArgs
         {

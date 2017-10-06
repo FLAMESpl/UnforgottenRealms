@@ -3,6 +3,8 @@ using UnforgottenRealms.Core.Input;
 using UnforgottenRealms.Window;
 using UnforgottenRealms.Controllers;
 using System;
+using System.Linq;
+using UnforgottenRealms.Core.Utils;
 
 namespace UnforgottenRealms
 {
@@ -21,9 +23,12 @@ namespace UnforgottenRealms
                 AntialiasingLevel = 8
             };
 
-            using (var window = new GameWindow(new VideoMode(640, 480), settings))
+            VideoMode.FullscreenModes.ForEach(x => Console.WriteLine($"{x.Width}:{x.Height}"));
+            var vm = VideoMode.FullscreenModes[0];
+            using (var window = new GameWindow())
             {
-                var inputProcessor = new InputProcessor(window, 1);
+                window.Initialize(vm, settings);
+
                 var controllerType = typeof(MenuController);
                 var controllerArgs = new ControllerCreationArguments
                 {

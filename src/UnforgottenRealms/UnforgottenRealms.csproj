@@ -62,15 +62,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentSchemes\MainMenuSchema.cs" />
+    <Compile Include="ComponentSchemas\MainMenuSchema.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\ControllerCreationArguments.cs" />
     <Compile Include="Controllers\ControllersContainer.cs" />
     <Compile Include="Controllers\ExitController.cs" />
+    <Compile Include="Controllers\MenuController.Components.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Window\GameWindow.cs" />
+    <Compile Include="Window\IWindowContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

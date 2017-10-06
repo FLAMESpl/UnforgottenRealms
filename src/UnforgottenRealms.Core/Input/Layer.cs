@@ -8,6 +8,8 @@ namespace UnforgottenRealms.Core.Input
     {
         private Dictionary<Type, ICollection<object>> handles = new Dictionary<Type, ICollection<object>>();
 
+        public bool Enabled { get; set; } = true;
+
         public void AddHandle<T>(IHandle<T> handle) where T : EventArgs
         {
             if (!handles.TryGetValue(typeof(T), out var handlesByType))
@@ -21,6 +23,9 @@ namespace UnforgottenRealms.Core.Input
 
         public IHandle<T> MatchHandle<T>(T eventArgs) where T : EventArgs
         {
+            if (!Enabled)
+                return null;
+
             handles.TryGetValue(typeof(T), out var handlesByType);
             return handlesByType?.Cast<IHandle<T>>().FirstOrDefault(h => h.DoesApply(eventArgs));
         }
