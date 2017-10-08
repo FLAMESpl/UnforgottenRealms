@@ -1,10 +1,14 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
 using System;
+using System.Linq;
 using UnforgottenRealms.ComponentSchemes;
+using UnforgottenRealms.Core.Definitions;
 using UnforgottenRealms.Core.Input;
 using UnforgottenRealms.Core.Input.Events;
+using UnforgottenRealms.Core.Utils;
 using UnforgottenRealms.UI.Components.Rectangle;
+using UnforgottenRealms.UI.Components.Rectangle.Extended;
 using UnforgottenRealms.UI.Containers;
 using UnforgottenRealms.Window;
 
@@ -75,14 +79,29 @@ namespace UnforgottenRealms.MainMenu
             var playFrame = schema.CreateSectionFrame();
             playComponents.Add(playFrame);
 
-            var playersCountLabel = schema.CreateLabel(0, "Players count:");
+            var levelLabel = schema.CreateSettingLabel(0, "Level:");
+            playFrame.Components.Add(levelLabel);
+
+            var levelButton = schema.CreateSettingButton(0, "SELECT LEVEL", 256);
+            RegisterButton(levelButton, PLAY_LAYER);
+            playFrame.Components.Add(levelButton);
+
+            var playersCountLabel = schema.CreateSettingLabel(2, "Players count:");
             playFrame.Components.Add(playersCountLabel);
+
+            var playersCountButton = schema.CreateSettingSquareButton(2, CreatePlayerCountStates(4));
+            RegisterButton(playersCountButton, PLAY_LAYER);
+            playFrame.Components.Add(playersCountButton);
 
             for (int i = 1; i <= 4; i++)
             {
-                var playerNameTextBox = schema.CreatePlayerNameTextBox(i, $"PLAYER {i}");
+                var playerNameTextBox = schema.CreatePlayerNameTextBox(i + 2, $"PLAYER {i}");
                 RegisterTextBox(playerNameTextBox, PLAY_LAYER);
                 playFrame.Components.Add(playerNameTextBox);
+
+                var playerColorButton = schema.CreatePlayerColorButton(i + 2, CreatePlayerColorStates(PlayerColorDefinitions.HumanPlayerColors));
+                RegisterButton(playerColorButton, PLAY_LAYER);
+                playFrame.Components.Add(playerColorButton);
             }
 
             activeContainer = homeComponents;
@@ -103,6 +122,39 @@ namespace UnforgottenRealms.MainMenu
                 var layer = inputProcessor.Layers[layerIndex];
                 layer.AddHandle<MouseButtonEventArgs>(textBox);
                 layer.AddHandle<TextEventArgs>(textBox);
+            }
+
+            Action<StateSelectButton>[] CreatePlayerCountStates(int maxPlayers)
+            {
+                var states = new Action<StateSelectButton>[maxPlayers - 1];
+                for (int i = 2; i <= maxPlayers; i++)
+                {
+                    var playerNumber = i.ToString();
+                    states[i - 2] = button =>
+                    {
+                        if (button.Text != null)
+                            button.Text.DisplayedString = playerNumber;
+                    };
+                }
+                return states;
+            }
+
+            Action<StateSelectButton>[] CreatePlayerColorStates(params PlayerColor[] colors)
+            {;
+                return colors.Select<PlayerColor, Action<StateSelectButton>>(color =>
+                {
+                    var idleColor = color.ToRGB();
+                    var highlightColor = idleColor.Dim(50);
+                    return (StateSelectButton button) =>
+                    {
+                        if (button.Shape != null)
+                        {
+                            button.IdleColor = idleColor;
+                            button.HighlightColor = highlightColor;
+                        }
+                    };
+                }
+                ).ToArray();
             }
 
             EventHandler<MouseButtonEventArgs> EventHandlerToChangeLayer(int layer, ComponentContainer container)

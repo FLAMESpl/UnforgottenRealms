@@ -15,13 +15,6 @@ namespace UnforgottenRealms
     {
         static void Main(string[] args)
         {
-            var controllers = new ControllersContainer
-            {
-                [typeof(MenuController)] = x => new MenuController(x),
-                [typeof(GameController)] = x => new GameController(x),
-                [typeof(ExitController)] = null
-            };
-
             var settings = new ContextSettings
             {
                 AntialiasingLevel = 8
@@ -39,28 +32,19 @@ namespace UnforgottenRealms
                     Window = window
                 };
 
-                Func<ControllerCreationArguments, ControllerBase> controllerFactory;
-                while ((controllerFactory = controllers[controllerType]) != null)
+                ControllerBase controller = null;
+                try
                 {
-                    var error = false;
-                    ControllerBase controller = null;
-                    try
+                    while ((controller = ControllersResolver.Get(controllerType, controllerArgs)) != null)
                     {
-                        controller = controllerFactory.Invoke(controllerArgs);
                         (controllerType, controllerArgs) = controller.Run();
+                        controller.Dispose();
                     }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.ToString());
-                        error = true;
-                    }
-                    finally
-                    {
-                        controller?.Dispose();
-                    }
-
-                    if (error)
-                        break;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    controller?.Dispose();
                 }
             }
         }
