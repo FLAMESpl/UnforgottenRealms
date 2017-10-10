@@ -27,7 +27,7 @@ namespace UnforgottenRealms
                 window.Initialize(vm, settings);
 
                 var controllerType = typeof(MenuController);
-                var controllerArgs = new ControllerCreationArguments
+                var controllerArgs = new ControllerArguments
                 {
                     Window = window
                 };

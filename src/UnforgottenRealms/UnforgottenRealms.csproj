@@ -63,13 +63,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameStart\GameController.cs" />
+    <Compile Include="GameStart\GameControllerArguments.cs" />
     <Compile Include="MainMenu\MenuSchema.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
-    <Compile Include="Controllers\ControllerCreationArguments.cs" />
+    <Compile Include="Controllers\ControllerArguments.cs" />
     <Compile Include="Controllers\ControllersResolver.cs" />
     <Compile Include="Controllers\ExitController.cs" />
     <Compile Include="MainMenu\MenuComponents.cs" />
     <Compile Include="MainMenu\MenuController.cs" />
+    <Compile Include="MainMenu\Settings\PlayerInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Window\GameWindow.cs" />

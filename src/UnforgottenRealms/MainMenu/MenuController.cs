@@ -1,7 +1,9 @@
 ﻿using SFML.Graphics;
 using System;
+using System.Collections.Generic;
 using UnforgottenRealms.Controllers;
 using UnforgottenRealms.GameStart;
+using UnforgottenRealms.MainMenu.Settings;
 using UnforgottenRealms.Window;
 
 namespace UnforgottenRealms.MainMenu
@@ -10,22 +12,24 @@ namespace UnforgottenRealms.MainMenu
     {
         private GameWindow window;
         private Type nextController = null;
-        private ControllerCreationArguments controllerArgs = null;
+        private ControllerArguments controllerArgs = null;
         private MenuComponents components;
         private bool isRunning = true;
         private bool isDisposing = false;
 
-        public MenuController(ControllerCreationArguments args)
+        private List<PlayerInfo> players = new List<PlayerInfo>();
+
+        public MenuController(ControllerArguments args)
         {
             window = args.Window;
+            window.Recreated += (s, e) => RecreateWindow();
             components = new MenuComponents(window);
-            window.Context = components;
             components.Initialize();
             components.ExitRequested += (s, e) => Exit();
             components.StartRequested += (s, e) => Play();
         }
 
-        public override (Type, ControllerCreationArguments) Run()
+        public override (Type, ControllerArguments) Run()
         {
             window.RenderWindow.SetFramerateLimit(60);
             window.RenderCallback = Render;
@@ -54,6 +58,11 @@ namespace UnforgottenRealms.MainMenu
             renderWindow.Display();
         }
 
+        private void RecreateWindow()
+        {
+
+        }
+
         private void Exit()
         {
             isRunning = false;
@@ -65,7 +74,7 @@ namespace UnforgottenRealms.MainMenu
         {
             isRunning = false;
             nextController = typeof(GameController);
-            controllerArgs = new ControllerCreationArguments
+            controllerArgs = new ControllerArguments
             {
                 Window = window
             };

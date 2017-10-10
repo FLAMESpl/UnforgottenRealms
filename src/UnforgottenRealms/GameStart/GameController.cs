@@ -1,9 +1,5 @@
 ﻿using SFML.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnforgottenRealms.Controllers;
 using UnforgottenRealms.Window;
 
@@ -13,12 +9,13 @@ namespace UnforgottenRealms.GameStart
     {
         private GameWindow window;
 
-        public GameController(ControllerCreationArguments args)
+        public GameController(ControllerArguments args)
         {
-            window = args.Window;
+            var gameArgs = args as GameControllerArguments;
+            window = gameArgs.Window;
         }
 
-        public override (Type, ControllerCreationArguments) Run()
+        public override (Type, ControllerArguments) Run()
         {
             window.RenderWindow.SetFramerateLimit(60);
             window.RenderCallback = Render;

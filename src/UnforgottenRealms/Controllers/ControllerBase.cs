@@ -4,7 +4,7 @@ namespace UnforgottenRealms.Controllers
 {
     public abstract class ControllerBase : IDisposable
     {
-        public abstract (Type, ControllerCreationArguments) Run();
+        public abstract (Type, ControllerArguments) Run();
 
         public virtual void Dispose()
         {

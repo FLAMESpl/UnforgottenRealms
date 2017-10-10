@@ -2,7 +2,7 @@
 
 namespace UnforgottenRealms.Controllers
 {
-    public class ControllerCreationArguments
+    public class ControllerArguments
     {
         public GameWindow Window { get; set; }
     }

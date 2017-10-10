@@ -7,6 +7,8 @@ namespace UnforgottenRealms.Window
 {
     public class GameWindow : IDisposable, IRenderWindowProvider
     {
+        public event EventHandler Recreated;
+
         private ContextSettings contextSettings;
         private VideoMode videoMode;
         private bool needsRecreating = false;
@@ -19,7 +21,6 @@ namespace UnforgottenRealms.Window
         }
 
         public RenderWindow RenderWindow { get; private set; }
-        public IWindowContext Context { get; set; }
 
         public GameWindow()
         {
@@ -32,9 +33,8 @@ namespace UnforgottenRealms.Window
 
             if (needsRecreating)
             {
-                Context.Clear();
                 Initialize(videoMode, contextSettings);
-                Context.Initialize();
+                OnRecreate();
                 needsRecreating = false;
             }
 
@@ -86,5 +86,7 @@ namespace UnforgottenRealms.Window
                 RenderWindow.Dispose();
             }
         }
+
+        private void OnRecreate() => Recreated?.Invoke(this, EventArgs.Empty);
     }
 }
