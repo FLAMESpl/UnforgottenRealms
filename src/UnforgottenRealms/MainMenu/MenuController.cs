@@ -15,18 +15,18 @@ namespace UnforgottenRealms.MainMenu
         private ControllerArguments controllerArgs = null;
         private MenuComponents components;
         private bool isRunning = true;
-        private bool isDisposing = false;
+        private bool isDisposed = false;
 
         private List<PlayerInfo> players = new List<PlayerInfo>();
 
         public MenuController(ControllerArguments args)
         {
             window = args.Window;
-            window.Recreated += (s, e) => RecreateWindow();
+            window.Recreated += HandleWindowRecreate;
             components = new MenuComponents(window);
             components.Initialize();
-            components.ExitRequested += (s, e) => Exit();
-            components.StartRequested += (s, e) => Play();
+            components.ExitRequested += HandleExitRequest;
+            components.StartRequested += HandleStartRequest;
         }
 
         public override (Type, ControllerArguments) Run()
@@ -44,10 +44,11 @@ namespace UnforgottenRealms.MainMenu
 
         public override void Dispose()
         {
-            if (isDisposing)
+            if (isDisposed)
                 return;
 
             components.Clear();
+            isDisposed = true;
         }
 
         private void Render(RenderWindow renderWindow)
@@ -79,5 +80,9 @@ namespace UnforgottenRealms.MainMenu
                 Window = window
             };
         }
+
+        private void HandleWindowRecreate(object sender, EventArgs e) => RecreateWindow();
+        private void HandleExitRequest(object sender, EventArgs e) => Exit();
+        private void HandleStartRequest(object sender, EventArgs e) => Play();
     }
 }
